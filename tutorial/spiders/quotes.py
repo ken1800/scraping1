@@ -8,13 +8,17 @@ import scrapy
 class QuotesSpider(scrapy.Spider):
     name = "quotes"
 
-    def start_requests(self):
-        url ='https://www.goodreads.com/quotes'
+    # def start_requests(self):
+    #     url ='https://www.goodreads.com/quotes'
         
-        yield scrapy.Request(url=url , callback=self.parse)
+    #     yield scrapy.Request(url=url , callback=self.parse)
+     
+    start_urls=[
+        'https://www.goodreads.com/quotes',
+    ]
 
     def parse(self, response):
-        for quote in response.selector.xpath("//div[@class ='quote']"):
+        for quote in response.xpath("//div[@class ='quote']"):
             loader = ItemLoader(item=QuoteItem(), selector=quote ,response=response)
             loader.add_xpath('text',".//div[@class='quoteText']/text()[1]")
             loader.add_xpath('author',".//div[@class='quoteText']/child::span")
